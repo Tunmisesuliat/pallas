@@ -25,7 +25,17 @@ export class SignUp extends Component {
             return;
         }
         try{
-            const {user} = await auth.createUserWithEmailAndPassword(email,password);
+            const {user} = await auth().createUserWithEmailAndPassword(email, password)
+            .catch(function (error){
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                if (errorCode === 'auth/weak-password') {
+                    alert('The password is too weak.');
+                } else {
+                    alert(errorMessage);
+                }
+                // alert(error.message)
+            })
             await createUserProfileDocument(user, {displayName})
 
             this.setState({
@@ -36,6 +46,7 @@ export class SignUp extends Component {
             });
         }catch(error){
             console.error(error);
+
         }
     }
 
@@ -64,7 +75,7 @@ export class SignUp extends Component {
 
             <FormInput
                 label= 'Email'
-                type = 'text'
+                type = 'email'
                 name = 'email'
                 value = {email}
                 onChange = {this.handleChange}
@@ -74,7 +85,7 @@ export class SignUp extends Component {
 
             <FormInput
                 label ='Password'
-                type = 'text'
+                type = 'password'
                 name = 'password'
                 value = {password}
                 onChange = {this.handleChange}
@@ -84,7 +95,7 @@ export class SignUp extends Component {
 
             <FormInput
                 label= 'Confirm Password'
-                type = 'text'
+                type = 'password'
                 name = 'confirmPassword'
                 value = {confirmPassword}
                 onChange = {this.handleChange}
