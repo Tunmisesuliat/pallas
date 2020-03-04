@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {setCurrentUser} from './redux/user/user.actions'
 import ShopPage from "./pages/ShopPage/ShopPage.component";
 import Header from "./components/header/header.component";
+import CheckoutPage from "./pages/checkout/checkout.component"
 import SignInSignUp from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
@@ -41,9 +42,11 @@ componentDidMount(){
           id: snapShot.id,
           ...snapShot.data()
         })
+        console.log(this.props.currentUser)
+
       });
     }
-    setCurrentUser(userAuth)
+    setCurrentUser(userAuth);
     })
 }
 
@@ -56,10 +59,11 @@ componentWillUnmount(){
       <div>
         <Header />
         <Switch>
-          <Route exact path="/" component={Homepage} />
-          <Route exact path="/shop" component={ShopPage} />
-          <Route path="/hats" component={HatsPage} />
-          <Route path="/signin" render={() => this.props.currentUser? (<Redirect to='/' />) : (<SignInSignUp />) } />
+          <Route exact path="/" render={() => this.props.currentUser? <Homepage /> : <SignInSignUp /> } />
+          <Route path="/shop" component={ShopPage} />
+          <Route exact path="/hats" component={HatsPage} />
+          <Route exact path="/checkout" component={CheckoutPage} />
+          {/* <Route path="/signin" component = {SignInSignUp}/> } /> */}
         </Switch>
       </div>
     );
